@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { ContainerDetail } from "./styles";
+
 
 function Details(){
 
@@ -11,27 +13,37 @@ function Details(){
     useEffect(() =>{
         //consumindo API
 
-        fetch('https://api.themoviedb.org/3/movie/${id}?api_key=a2ec7b90c1ab9bca5ffe4f0f7d5d5c37')
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=a2ec7b90c1ab9bca5ffe4f0f7d5d5c37`)
         
         .then(response => response.json())
         .then(data => {
 
             const movie = {
                 id,
-                title: data.tile,
+                title: data.title,
                 sinopse: data.overview,
                 image: `${images}${data.poster_path}`,
                 releaseDate: data.release_date
             }
             setMovie(movie)
             console.log("MOVIE",movie)
-            console.log(id)
         })
 
     }, [ id ])
 
     return(
-        <h1>Details's page</h1>
+        <ContainerDetail>
+            <h1>Details's page</h1>
+            <div className="movie">
+            <img src={movie.image}/>
+                <div className="details">
+                <h1>{movie.title}</h1>
+                <span>Sinopse: {movie.sinopse}</span>
+                <span className="release">Release date: {movie.releaseDate}</span>
+                <Link to="/"><button>go back</button></Link>
+                </div>
+            </div>
+        </ContainerDetail>
     )
 }
 
